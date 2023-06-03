@@ -168,6 +168,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text) 
             echo $host >> inventory.txt
+            export HOST=$host
             cat inventory.txt
       # - run:
       #     name: Add back-end ip to ansible inventory
@@ -205,6 +206,7 @@ jobs:
           command: |
             pwd &&
             ls -la
+            echo $HOST >> inventory.txt
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       # - destroy-environment:
