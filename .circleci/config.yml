@@ -3,23 +3,14 @@ version: 2.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    pparameters:
-      when:
-        type: string
-      id:
-        type: string
+    parameters:
+      # Add parameter here   
     steps:
       - run:
-          name: Destroy udapeople backend cfn stack
+          name: Destroy environments
+          when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.id >>
-          when: << parameters.when >>
-      - run:
-          name: Destroy udapeople frontend cfn stack and S3 bucket
-          command: |
-            aws s3 rm s3://udapeople-<< parameters.id >> --recursive
-            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.id >>
-          when: << parameters.when >>
+            # Your code here
 
 #   revert-migrations:
 #     description: Revert the last migration if successfully run in the current workflow.
@@ -215,9 +206,9 @@ jobs:
             ls -la
             cat inventory
             ansible-playbook -i inventory configure-server.yaml
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
+      # - destroy-environment:
+      #     id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #     when: on_fail
       # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
