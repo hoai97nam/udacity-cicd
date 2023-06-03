@@ -74,8 +74,10 @@ jobs:
       # Docker image here
     steps:
       - checkout
-      restore_cache:
-        keys: [frontend-build]
+      - restore_cache:
+         keys: [frontend-build]
+      - run:
+        name: Test frontend  
         command: |
           cd frontend
           npm install
@@ -89,8 +91,10 @@ jobs:
       # Docker image here
     steps:
       - checkout
-      restore_cache:
-        keys: [backend-build]
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+        name: Test backend
         command: |
           cd backend
           npm install
