@@ -160,6 +160,15 @@ jobs:
               --tags project=udapeople \
               --stack-name "udapeople-front-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
+          name: Add backend ip to ansible inventory
+          working_directory: ./.circleci/ansible
+          command: |
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text >> inventory
+            cat inventory
       # - run:
       #     name: Add back-end ip to ansible inventory
       #     command: |
@@ -171,24 +180,37 @@ jobs:
       #       - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.9.0-alpine
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["a7:c0:ee:e6:f3:a0:03:13:14:2a:68:a9:33:92:5c:33"]
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install dependencies
+          working_directory: ./.circleci/ansible
+          command: |
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Configure server
+          working_directory: ./.circleci/ansible
+          command: |
+            pwd &&
+            ls -la
+            cat inventory
+            ansible-playbook -i inventory configure-server.yaml
+      - destroy_environment:
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
+          when: on_fail
+      # Here's where you will add some code to rollback on failure      
 
 #   run-migrations:
 #     docker:
@@ -326,8 +348,8 @@ workflows:
             branches:
               only: 
                 - main
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
