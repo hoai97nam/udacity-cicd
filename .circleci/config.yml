@@ -136,7 +136,8 @@ jobs:
             npm audit fix --audit-level=critical
 
   deploy-infrastructure:
-    executor: aws
+    docker:
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - checkout
