@@ -145,6 +145,7 @@ jobs:
           command: yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
+          working_directory: ./.circleci/files
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
@@ -163,10 +164,11 @@ jobs:
           name: Add backend ip to ansible inventory
           working_directory: ./.circleci/ansible
           command: |
-            ls
-            aws ec2 describe-instances \
+            
+            host=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory.txt
+              --output text) 
+            echo $host >> inventory.txt
             cat inventory.txt
       # - run:
       #     name: Add back-end ip to ansible inventory
