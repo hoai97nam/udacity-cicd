@@ -170,10 +170,9 @@ jobs:
             echo $host >> inventory.txt
             export HOST=$host
             cat inventory.txt
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./.circleci/ansible/inventory
+      - save_cache:
+          paths: [/.circleci/ansible/inventory.txt]
+          key: invent
       # - run:
       #     name: Add back-end ip to ansible inventory
       #     command: |
@@ -196,14 +195,15 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["a7:c0:ee:e6:f3:a0:03:13:14:2a:68:a9:33:92:5c:33"]
-      - attach_workspace:
-          at: ./
+      
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
           command: |
             apk add --update ansible
             ansible --version
+      - restore_cache:
+          key: invent
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
