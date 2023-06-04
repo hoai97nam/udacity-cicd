@@ -173,7 +173,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - inventory.txt
+            - .
       # - run:
       #     name: Add back-end ip to ansible inventory
       #     command: |
@@ -211,6 +211,7 @@ jobs:
           command: |
             pwd &&
             ls -la
+            echo $HOST
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       # - destroy-environment:
