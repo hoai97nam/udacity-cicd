@@ -170,9 +170,10 @@ jobs:
             echo $host >> inventory.txt
             export HOST=$host
             cat inventory.txt
-      - save_cache:
-          paths: [/.circleci/ansible/inventory.txt]
-          key: invent
+      - persist_to_workspace:
+          root: ansible
+          paths:
+            - inventory.txt
       # - run:
       #     name: Add back-end ip to ansible inventory
       #     command: |
@@ -202,8 +203,8 @@ jobs:
           command: |
             apk add --update ansible
             ansible --version
-      - restore_cache:
-          key: invent
+      - attach_workspace:
+          at: ansible
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
@@ -211,7 +212,7 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            ansible-playbook -i ./.circleci/ansible/inventory.txt configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       # - destroy-environment:
       #     id: ${CIRCLE_WORKFLOW_ID:0:7}
       #     when: on_fail
