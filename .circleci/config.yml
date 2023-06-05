@@ -285,7 +285,7 @@ jobs:
           working_directory: ./backend
           command: |
             npm install
-            npm audit fix
+            npm audit fix --force
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
