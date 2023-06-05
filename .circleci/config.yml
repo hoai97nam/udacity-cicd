@@ -42,23 +42,52 @@ commands:
 #             fi
             
 jobs:
+
+  install-backend-dependencies:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: npm install - feature test
+          working_directory: ./backend
+          command: ls -la && npm install
+      - persist_to_workspace:
+          root: .
+          paths:
+            - backend/node_modules
+
+  install-frontend-dependencies:
+   docker:
+      - image: circleci/node:13.8.0
+   steps:
+      - checkout
+      - run:
+          name: npm install - feature test
+          working_directory: ./frontend
+          command: ls -la && npm install
+      - persist_to_workspace:
+          root: .
+          paths:
+            - frontend/node_modules
+  
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      - attach_workspace:
+          at: .
+      # - restore_cache:
+      #     keys: [frontend-build]
       - run:
           name: Build front-end
           command: |
-            # Your code here
             cd frontend
-            npm install
             npm run build
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+      # - save_cache:
+      #     paths: [frontend/node_modules]
+      #     key: frontend-build
 
   build-backend:
     docker:
@@ -72,11 +101,11 @@ jobs:
           command: |
              # Your code here
              cd backend
-             npm install
              npm run build
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - backend/dist
 
   test-frontend:
     docker:
@@ -84,13 +113,14 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      # - restore_cache:
+      #     keys: [frontend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Test frontend  
           command: |
             cd frontend
-            npm install
             npm run test
       # Checkout code from git
       # Restore from cache
@@ -102,13 +132,12 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Test backend
           command: |
             cd backend
-            npm install
             npm run test
       # Checkout code from git
       # Restore from cache
@@ -120,13 +149,12 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Scan frontend
           command: |
             cd frontend
-            npm install
             npm audit fix --audit-level=critical
 
   scan-backend:
@@ -135,13 +163,12 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Scan backend
           command: |
             cd backend
-            npm install
             npm audit fix --audit-level=critical
 
   deploy-infrastructure:
@@ -208,7 +235,6 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
       - image: python:3.9.0-alpine
     steps:
       # Checkout code from git
@@ -217,15 +243,14 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["a7:c0:ee:e6:f3:a0:03:13:14:2a:68:a9:33:92:5c:33"]
-      
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible
           command: |
             apk add --update ansible
             ansible --version
-      - attach_workspace:
-          at: .
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
@@ -246,6 +271,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
@@ -380,6 +407,10 @@ jobs:
 workflows:
   default:
     jobs:
+
+      - install-backend-dependencies
+      - install-frontend-dependencies
+
       - build-frontend
       - build-backend
       - test-frontend:
