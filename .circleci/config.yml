@@ -272,6 +272,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install AWS CLI dependencies
           working_directory: /tmp
