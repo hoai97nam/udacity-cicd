@@ -284,8 +284,9 @@ jobs:
           name: Run migrations
           working_directory: ./backend
           command: |
-            sudo npm install
-            sudo npm run migrations > migrations_dump.txt
+            npm install
+            npm audit fix
+            npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
           name: Send migration results to memstash | kvdb
