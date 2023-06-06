@@ -215,7 +215,7 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
 
-            curl -H "Content-Type: text/plain" https://kvdb.io/165MRXeJ4TuAgpGfc1LKyy/BACKEND_URL -d 'http://$BACKEND_IP:3030'
+            curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL -d 'http://$BACKEND_IP:3030'
       - persist_to_workspace:
           root: .
           paths:
@@ -292,7 +292,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl -H "Content-Type: text/plain" https://kvdb.io/165MRXeJ4TuAgpGfc1LKyy/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+              curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
