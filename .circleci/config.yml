@@ -212,7 +212,7 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
 
-            curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL -d 'http://$BACKEND_IP:3030'
+            curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL -d "http://$BACKEND_IP:3030"
       - persist_to_workspace:
           root: .
           paths:
