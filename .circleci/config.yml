@@ -336,7 +336,6 @@ jobs:
                     
   deploy-backend:
     docker:
-      docker:
       - image: python:3.9.0-alpine
     steps:
       - checkout
