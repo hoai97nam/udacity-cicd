@@ -367,6 +367,12 @@ jobs:
           command: |
             export BACKEND_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL)
             curl "${BACKEND_URL}"
+            if curl "${BACKEND_URL}/api/status" | grep "ok"
+            then
+              return 0
+            else
+              return 1
+            fi
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
@@ -378,9 +384,9 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
+      # - destroy-environment:
+      #     id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #     when: on_fail
       # Here's where you will add some code to rollback on failure  
 
 #   cloudfront-update:
