@@ -1,2 +1,4 @@
 Public Url to GitHub repository (not private) [URL01]
   https://github.com/hoai97nam/udacity-cicd
+Public URL for your S3 Bucket
+  https://udapeople-d9617df.s3.amazonaws.com/index.html#/employees
