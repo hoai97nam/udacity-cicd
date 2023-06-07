@@ -366,7 +366,7 @@ jobs:
           name: Backend smoke test.
           command: |
             export BACKEND_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL)
-            curl "${BACKEND_URL}"
+            echo "${BACKEND_URL}"
             if curl "${BACKEND_URL}/api/status" | grep "ok"
             then
               return 0
