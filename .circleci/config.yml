@@ -42,7 +42,7 @@ commands:
               npm install
               npm run migration:revert
             fi
-          when: << parameters.when >>
+          when: << parameters.when >>gg
             
 jobs:
 
