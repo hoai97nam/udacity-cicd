@@ -280,8 +280,8 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
-            else
-              curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0'
+            # else
+            #   curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0'
             fi
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
