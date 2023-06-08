@@ -35,7 +35,7 @@ commands:
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/migration_<< parameters.id >>)
+            SUCCESS=$(curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_<< parameters.id >>)
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -215,7 +215,7 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
 
-            curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL -d "http://$BACKEND_IP:3030"
+            curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/BACKEND_URL -d "http://$BACKEND_IP:3030"
       - persist_to_workspace:
           root: .
           paths:
@@ -279,9 +279,9 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-              curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+              curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             else
-              curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0'
+              curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '0'
             fi
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -376,7 +376,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            export BACKEND_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Q6URFwau3V2JZdE1nQa9NW/BACKEND_URL)
+            export BACKEND_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/BACKEND_URL)
             echo "${BACKEND_URL}"
            
       - run:
