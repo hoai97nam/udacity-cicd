@@ -378,7 +378,7 @@ jobs:
           command: |
             export BACKEND_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/BACKEND_URL)
             echo "${BACKEND_URL}"
-           
+            curl "$BACKEND_URL/api/status"
       - run:
           name: Frontend smoke test.
           working_directory: ./backend
