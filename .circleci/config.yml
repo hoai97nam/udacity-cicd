@@ -119,8 +119,8 @@ jobs:
           name: Back-end build
           command: |
              # Your code here
-             cat .env
              cd backend
+             cat .env
              npm run build
       - persist_to_workspace:
           root: .
