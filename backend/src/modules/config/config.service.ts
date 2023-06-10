@@ -3,6 +3,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AboutInfo } from './about.interface';
 import { Order } from '../../modules/domain/orders/entities/order.entity';
 import { Employee } from '../domain/employees/entities/employee.entity';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export interface EnvConfig {
   VERSION: string;
