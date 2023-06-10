@@ -114,6 +114,7 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> .env
             echo TYPEORM_PORT=$TYPEORM_PORT >> .env
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> .env
+            pwd && cat .env
       - run:
           name: Back-end build
           command: |
