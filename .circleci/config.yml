@@ -307,7 +307,7 @@ jobs:
           working_directory: ./frontend
           command: |
             # your code here
-            export API_URL="http://${BACKEND_IP}:3030"
+            export API_URL=$(curl -H "Content-Type: text/plain" https://kvdb.io/Ua6QkHU8daJUcM1VWVSUVJ/BACKEND_URL)
             echo "${API_URL}"
             npm run build
       - run:
