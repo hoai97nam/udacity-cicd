@@ -307,7 +307,7 @@ jobs:
           working_directory: ./frontend
           command: |
             # your code here
-            export API_URL=$(curl https://kvdb.io/WryrPrfeyBUkG1jWmfihZm/BACKEND_URL)
+            export API_URL=$(curl -k https://kvdb.io/WryrPrfeyBUkG1jWmfihZm/BACKEND_URL)
             echo "${API_URL}"
             npm run build
       - run:
